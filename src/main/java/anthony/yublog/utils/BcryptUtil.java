@@ -2,6 +2,7 @@ package anthony.yublog.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+// TODO: 加密工具类优化
 public class BcryptUtil {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -13,6 +14,8 @@ public class BcryptUtil {
     }
     /**
      * 验证明文密码和hash值是否匹配
+     * 在登录验证密码时使用
+     * 返回值为boolean
      */
     public static boolean matches(String password, String encodedPassword) {
         return encoder.matches(password, encodedPassword);

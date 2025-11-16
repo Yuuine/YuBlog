@@ -1,11 +1,11 @@
 spring:
-#MySql 连接配置
+  #MySql 连接配置
   datasource:
     url: jdbc:mysql://localhost:3306/yu_blog?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: 123456  # ← 改成你的密码
     driver-class-name: com.mysql.cj.jdbc.Driver
-#Spring Security 配置
+  #Spring Security 配置
   security:
     user:
       name: admin
@@ -19,3 +19,9 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+
+# jwt 配置
+# ${JWT_SECRET_KEY:your-strong-secret-key-here} 从环境变量读取，本地开发用默认值
+jwt:
+  secret: default
+  expiration: 43200000
