@@ -13,6 +13,8 @@ public class BcryptUtil {
     }
     /**
      * 验证明文密码和hash值是否匹配
+     * 在登录验证密码时使用
+     * 返回值为boolean
      */
     public static boolean matches(String password, String encodedPassword) {
         return encoder.matches(password, encodedPassword);
