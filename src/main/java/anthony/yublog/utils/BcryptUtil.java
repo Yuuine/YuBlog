@@ -2,6 +2,7 @@ package anthony.yublog.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+// TODO: 加密工具类优化
 public class BcryptUtil {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
