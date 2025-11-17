@@ -4,10 +4,12 @@ import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
 import anthony.yublog.utils.JwtUtil;
+import anthony.yublog.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,5 +70,13 @@ public class userController {
         }
         log.info("用户 {} 登录失败", username);
         return Result.error("用户名或密码错误");
+    }
+
+    @GetMapping("/userInfo")
+    public Result<User> userInfo() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String username = (String) claims.get("username");
+        User user = userService.findByUserName(username);
+        return Result.success(user);
     }
 }
