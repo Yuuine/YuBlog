@@ -1,6 +1,7 @@
 package anthony.yublog.interceptors;
 
 import anthony.yublog.utils.JwtUtil;
+import anthony.yublog.utils.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         try {
             Map<String, Object> claims = JwtUtil.parseToken(token);
+            //把业务数据存储到ThreadLocal里面
+
+            ThreadLocalUtil.set(claims);
             return true;
         } catch (Exception e) {
             response.setStatus(401);
