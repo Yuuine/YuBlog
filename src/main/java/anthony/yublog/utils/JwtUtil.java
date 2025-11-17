@@ -29,7 +29,7 @@ public final class JwtUtil {
     }
 
     // 从application.yaml中获取过期时间
-    @Value("${jwt.expiration:43200000}") // 12小时默认值
+    @Value("${jwt.expiration}") // 120小时默认值
     public void setExpirationTime(long expirationTime) {
         JwtUtil.expirationTime = expirationTime;
     }

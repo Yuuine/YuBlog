@@ -18,10 +18,11 @@ spring:
 # 可选：MyBatis 配置
 mybatis:
   configuration:
+    #驼峰映射配置
     map-underscore-to-camel-case: true
 
 # jwt 配置
 # ${JWT_SECRET_KEY:your-strong-secret-key-here} 从环境变量读取，本地开发用默认值
 jwt:
   secret: default
-  expiration: 43200000
+  expiration: 432000000
