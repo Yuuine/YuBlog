@@ -7,12 +7,10 @@ import anthony.yublog.utils.JwtUtil;
 import anthony.yublog.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +70,9 @@ public class userController {
         return Result.error("用户名或密码错误");
     }
 
+    /**
+     * 获取用户信息
+     */
     @GetMapping("/userInfo")
     public Result<User> userInfo() {
         Map<String, Object> claims = ThreadLocalUtil.get();
@@ -79,4 +80,29 @@ public class userController {
         User user = userService.findByUserName(username);
         return Result.success(user);
     }
+
+    /**
+     * 更新用户信息
+     * 1. nickname
+     * 2. email
+     */
+
+    @PutMapping("/update")
+    public Result<Object> update(@RequestBody @Validated User user) {
+        userService.update(user);
+        log.info("用户信息更新成功");
+        return Result.success(user);
+    }
+
+    /**
+     * 更新用户头像
+     */
+
+    @PatchMapping("/updateAvatar")
+    public Result<Object> updateAvatar(@RequestParam @URL String avatarUrl) {
+        userService.updateAvatar(avatarUrl);
+        log.info("用户更新头像成功");
+        return Result.success();
+    }
+
 }
