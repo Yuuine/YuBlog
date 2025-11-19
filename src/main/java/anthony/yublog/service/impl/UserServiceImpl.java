@@ -52,4 +52,14 @@ public class UserServiceImpl implements UserService {
         Integer idStr = Integer.valueOf(id.toString());
         userMapper.updateAvatar(avatarUrl, idStr);
     }
+
+    @Override
+    public void updatePwd(String newPwd) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object id = map.get("id");
+        Integer idStr = Integer.valueOf(id.toString());
+        //密码加密
+        String bcryptPassword = BcryptUtil.encode(newPwd);
+        userMapper.updatePwd(bcryptPassword, idStr);
+    }
 }
