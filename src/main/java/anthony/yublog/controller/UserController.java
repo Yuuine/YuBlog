@@ -23,7 +23,7 @@ import static anthony.yublog.utils.BcryptUtil.matches;
 @Validated  //参数校验框架，Spring提供
 @RestController
 @RequestMapping("/user")
-public class userController {
+public class UserController {
 
     @Autowired
     private UserService userService;
