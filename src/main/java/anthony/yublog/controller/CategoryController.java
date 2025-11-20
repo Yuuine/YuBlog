@@ -33,4 +33,13 @@ public class CategoryController {
         List<Category> cs = categoryService.list();
         return Result.success(cs);
     }
+
+    /*
+        查询文章分类详情
+     */
+    @GetMapping("/detail")
+    public Result<Category> detail(Integer id) {
+        Category c = categoryService.findById(id);
+        return Result.success(c);
+    }
 }
