@@ -1,8 +1,8 @@
 package anthony.yublog.controller;
 
 import anthony.yublog.dto.CategoryCreateDTO;
+import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.pojo.Category;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +49,8 @@ public class CategoryController {
      * 根据文章分类标签id查询文章分类标签详情，两个字段：1. 分类标签名称 2. 分类标签别名
      */
     @GetMapping("/detail")
-    public Result<Category> detail(Integer id) {
-        Category c = categoryService.findById(id);
+    public Result<CategoryDetailDTO> detail(Integer id) {
+        CategoryDetailDTO c = categoryService.findById(id);
         return Result.success(c);
     }
 }

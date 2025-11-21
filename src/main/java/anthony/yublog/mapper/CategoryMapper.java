@@ -1,8 +1,8 @@
 package anthony.yublog.mapper;
 
 import anthony.yublog.dto.CategoryCreateDTO;
+import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.pojo.Category;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -21,5 +21,5 @@ public interface CategoryMapper {
     List<CategoryListDTO> list(Integer userId);
 
     @Select("select * from category where id = #{id}")
-    Category findById(Integer id);
+    CategoryDetailDTO findById(Integer id);
 }

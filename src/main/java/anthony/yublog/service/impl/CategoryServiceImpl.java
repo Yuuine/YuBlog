@@ -1,9 +1,9 @@
 package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.CategoryCreateDTO;
+import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
 import anthony.yublog.mapper.CategoryMapper;
-import anthony.yublog.pojo.Category;
 import anthony.yublog.service.CategoryService;
 import anthony.yublog.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category findById(Integer id) {
+    public CategoryDetailDTO findById(Integer id) {
         return categoryMapper.findById(id);
     }
 }
