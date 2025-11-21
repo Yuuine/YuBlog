@@ -1,6 +1,7 @@
 package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.CategoryCreateDTO;
+import anthony.yublog.dto.CategoryListDTO;
 import anthony.yublog.mapper.CategoryMapper;
 import anthony.yublog.pojo.Category;
 import anthony.yublog.service.CategoryService;
@@ -29,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> list() {
+    public List<CategoryListDTO> list() {
         //获取当前用户id
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer userId = (Integer) map.get("id");

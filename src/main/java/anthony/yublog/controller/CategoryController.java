@@ -1,6 +1,7 @@
 package anthony.yublog.controller;
 
 import anthony.yublog.dto.CategoryCreateDTO;
+import anthony.yublog.dto.CategoryListDTO;
 import anthony.yublog.pojo.Category;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
@@ -38,7 +39,7 @@ public class CategoryController {
      */
     @GetMapping
     public Result<Object> list() {
-        List<Category> cs = categoryService.list();
+        List<CategoryListDTO> cs = categoryService.list();
         return Result.success(cs);
     }
 
