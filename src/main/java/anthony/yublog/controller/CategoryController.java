@@ -1,5 +1,6 @@
 package anthony.yublog.controller;
 
+import anthony.yublog.dto.CategoryCreateDTO;
 import anthony.yublog.pojo.Category;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
@@ -25,7 +26,7 @@ public class CategoryController {
      * TODO: 英文别名默认为首个单词的前三个字母小写，如“travelNote”-“tra”
      */
     @PostMapping
-    public Result<Object> add(@RequestBody @Validated Category category) {
+    public Result<Object> add(@RequestBody @Validated CategoryCreateDTO category) {
         categoryService.add(category);
         return Result.success();
     }
