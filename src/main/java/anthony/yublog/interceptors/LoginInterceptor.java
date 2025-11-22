@@ -29,4 +29,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
     }
 
+    //请求完成后清除当前线程的用户上下文
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        ThreadLocalUtil.remove(); // 清除当前线程的用户上下文
+    }
+
 }

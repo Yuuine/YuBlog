@@ -22,4 +22,10 @@ public interface CategoryMapper {
 
     @Select("select * from category where id = #{id}")
     CategoryDetailDTO findById(Integer id);
+
+    @Select("select * from category where category_name = #{categoryName} and create_user = #{userId}")
+    List<CategoryListDTO> listByCatNameAndId(String categoryName, Integer userId);
+
+    @Select("select * from category where category_alias = #{categoryAlias} and create_user = #{currentUserId}")
+    List<CategoryListDTO> listByCatAliasAndId(String categoryAlias, Integer currentUserId);
 }
