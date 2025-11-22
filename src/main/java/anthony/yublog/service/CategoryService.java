@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CategoryService {
     //添加分类标签
-    void add(CategoryCreateDTO category);
+    int add(CategoryCreateDTO category);
 
     //列表查询
     List<CategoryListDTO> list();

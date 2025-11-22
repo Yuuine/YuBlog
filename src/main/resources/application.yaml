@@ -26,3 +26,16 @@ mybatis:
 jwt:
   secret: default
   expiration: 432000000
+
+logging:
+  level:
+    anthony.yublog.mapper: debug
+
+  file:
+    name: logs/app.log          # 日志输出路径
+
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB       # 单个文件最大 10MB
+      max-history: 7            # 保留 7 个历史文件
+      # total-size-cap: 1GB    # 总日志大小上限
