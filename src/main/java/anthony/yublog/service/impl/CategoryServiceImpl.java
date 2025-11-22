@@ -9,6 +9,7 @@ import anthony.yublog.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,12 +19,30 @@ import static anthony.yublog.utils.AliasUtil.generateAlias;
 
 @Slf4j
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    private Integer getCurrentUserId() {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        return (Integer) map.get("id");
+    }
+
     @Override
-    public void add(CategoryCreateDTO category) {
+    @Transactional(rollbackFor = Exception.class)
+    //TODO: 魔法数字问题待优化
+    //TODO: 并发问题待处理
+    public int add(CategoryCreateDTO category) {
+        //判断传入的分类名称是否已存在，存在返回 int = 1
+        String categoryName = category.getCategoryName();
+        if (categoryNameExist(categoryName, getCurrentUserId())) {
+            return 1;
+        }
+        //判断传入的分类别名是否已存在，存在返回 int = 2
+        if (categoryAliasExist(category.getCategoryAlias(), getCurrentUserId())) {
+            return 2;
+        }
         //判断用户是否提供别名，没有自动生成别名
         String alias = category.getCategoryAlias();
         //返回生成好的别名
@@ -37,18 +56,27 @@ public class CategoryServiceImpl implements CategoryService{
         category.setCreateTime(LocalDateTime.now());
         category.setUpdateTime(LocalDateTime.now());
         categoryMapper.add(category);
+        return 0;
     }
 
     @Override
     public List<CategoryListDTO> list() {
         //获取当前用户id
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer userId = (Integer) map.get("id");
-        return categoryMapper.list(userId);
+        return categoryMapper.list(getCurrentUserId());
     }
 
     @Override
     public CategoryDetailDTO findById(Integer id) {
         return categoryMapper.findById(id);
+    }
+
+    public boolean categoryNameExist(String categoryName, Integer userId) {
+        List<CategoryListDTO> list = categoryMapper.listByCatNameAndId(categoryName, userId);
+        return list != null && !list.isEmpty();
+    }
+
+    private boolean categoryAliasExist(String categoryAlias, Integer currentUserId) {
+        List<CategoryListDTO> list = categoryMapper.listByCatAliasAndId(categoryAlias, currentUserId);
+        return list != null && !list.isEmpty();
     }
 }
