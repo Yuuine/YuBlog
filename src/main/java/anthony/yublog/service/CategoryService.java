@@ -15,4 +15,6 @@ public interface CategoryService {
 
     //根据id查询
     CategoryDetailDTO findById(Integer id);
+
+    boolean delete(Integer id);
 }

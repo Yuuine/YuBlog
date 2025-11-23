@@ -3,6 +3,7 @@ package anthony.yublog.mapper;
 import anthony.yublog.dto.CategoryCreateDTO;
 import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -28,4 +29,7 @@ public interface CategoryMapper {
 
     @Select("select * from category where category_alias = #{categoryAlias} and create_user = #{currentUserId}")
     List<CategoryListDTO> listByCatAliasAndId(String categoryAlias, Integer currentUserId);
+
+    @Delete("delete from category where id = #{id}")
+    int delete(Integer id);
 }

@@ -70,6 +70,11 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.findById(id);
     }
 
+    @Override
+    public boolean delete(Integer id) {
+        return categoryMapper.delete(id) > 0;
+    }
+
     public boolean categoryNameExist(String categoryName, Integer userId) {
         List<CategoryListDTO> list = categoryMapper.listByCatNameAndId(categoryName, userId);
         return list != null && !list.isEmpty();

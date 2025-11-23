@@ -56,4 +56,13 @@ public class CategoryController {
         CategoryDetailDTO c = categoryService.findById(id);
         return Result.success(c);
     }
+    /**
+     * 功能4：
+     * 删除分类标签
+     */
+    @DeleteMapping("/{id}")
+    public Result<Object> delete(@PathVariable Integer id) {
+        boolean result = categoryService.delete(id);
+        return result ? Result.success() : Result.error("删除失败");
+    }
 }
