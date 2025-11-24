@@ -3,10 +3,7 @@ package anthony.yublog.mapper;
 import anthony.yublog.dto.CategoryCreateDTO;
 import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -32,4 +29,7 @@ public interface CategoryMapper {
 
     @Delete("delete from category where id = #{id}")
     int delete(Integer id);
+
+    @Update("update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = now() where id = #{id}")
+    int update(Integer id, String categoryName, String categoryAlias);
 }

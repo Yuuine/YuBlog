@@ -3,6 +3,7 @@ package anthony.yublog.controller;
 import anthony.yublog.dto.CategoryCreateDTO;
 import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
+import anthony.yublog.dto.CategoryUpdateDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,18 @@ public class CategoryController {
         CategoryDetailDTO c = categoryService.findById(id);
         return Result.success(c);
     }
+
     /**
      * 功能4：
+     * 修改分类标签
+     */
+    @PutMapping
+    public Result<Object> update(@RequestBody @Validated CategoryUpdateDTO category) {
+        boolean result = categoryService.update(category);
+        return result ? Result.success() : Result.error("修改失败");
+    }
+    /**
+     * 功能5：
      * 删除分类标签
      */
     @DeleteMapping("/{id}")

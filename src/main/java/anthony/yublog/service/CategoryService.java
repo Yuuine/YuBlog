@@ -3,6 +3,7 @@ package anthony.yublog.service;
 import anthony.yublog.dto.CategoryCreateDTO;
 import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
+import anthony.yublog.dto.CategoryUpdateDTO;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface CategoryService {
     CategoryDetailDTO findById(Integer id);
 
     boolean delete(Integer id);
+
+    boolean update(CategoryUpdateDTO category);
 }
