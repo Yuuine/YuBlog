@@ -32,7 +32,7 @@ logging:
     anthony.yublog.mapper: debug
 
   file:
-    name: logs/app.log          # 日志输出路径
+    name: G:/logs/yublog/app.log         # 日志输出路径
 
   logback:
     rollingpolicy:
