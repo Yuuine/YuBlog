@@ -2,6 +2,7 @@ package anthony.yublog.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class CategoryDetailDTO {
 
-    @NotBlank(message = "分类id不能为空")
+    @NotNull
     private Integer id;
     @NotBlank(message = "分类名称不能为空")
     private String categoryName;

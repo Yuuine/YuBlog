@@ -1,0 +1,15 @@
+package anthony.yublog.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
+public class CategoryUpdateDTO {
+    @NotNull
+    private Integer id;//主键ID
+    @NotBlank(message = "分类名称不能为空")
+    private String categoryName;//分类名称
+    @NotBlank(message = "分类别名不能为空")
+    private String categoryAlias;//分类别名
+}

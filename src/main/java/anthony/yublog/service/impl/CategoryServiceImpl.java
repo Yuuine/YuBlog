@@ -3,6 +3,7 @@ package anthony.yublog.service.impl;
 import anthony.yublog.dto.CategoryCreateDTO;
 import anthony.yublog.dto.CategoryDetailDTO;
 import anthony.yublog.dto.CategoryListDTO;
+import anthony.yublog.dto.CategoryUpdateDTO;
 import anthony.yublog.mapper.CategoryMapper;
 import anthony.yublog.service.CategoryService;
 import anthony.yublog.utils.ThreadLocalUtil;
@@ -73,6 +74,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public boolean delete(Integer id) {
         return categoryMapper.delete(id) > 0;
+    }
+
+    @Override
+    public boolean update(CategoryUpdateDTO category) {
+        return categoryMapper.update(category.getId(), category.getCategoryName(),
+                category.getCategoryAlias()) > 0;
     }
 
     public boolean categoryNameExist(String categoryName, Integer userId) {
