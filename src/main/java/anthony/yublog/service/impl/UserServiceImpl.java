@@ -1,5 +1,6 @@
 package anthony.yublog.service.impl;
 
+import anthony.yublog.dto.UserLoginDTO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;
@@ -73,11 +74,11 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户登录
      *
-     * @param username 用户名
-     * @param password 密码
      * @return token 登录成功返回token
      */
-    public String login(String username, String password) {
+    public String login(UserLoginDTO userLoginDTO) {
+        String username = userLoginDTO.getUsername();
+        String password = userLoginDTO.getPassword();
         User loginUser = getUserByUserName(username);
         //根据用户名查询用户是否存在
         if (loginUser == null) {

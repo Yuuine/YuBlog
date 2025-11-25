@@ -5,10 +5,11 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class UserRegisterDTO {
+public class UserLoginDTO {
     @NotBlank
     @Pattern(regexp = "^\\S{5,16}$")
     private String username;
+
     @NotBlank
     @Pattern(regexp = "^\\S{5,16}$")
     private String password;
