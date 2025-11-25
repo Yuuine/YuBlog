@@ -1,5 +1,6 @@
 package anthony.yublog.controller;
 
+import anthony.yublog.dto.UserLoginDTO;
 import anthony.yublog.dto.UserRegisterDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
@@ -38,15 +39,12 @@ public class UserController {
 
     /**
      * 用户注册
-     *
-     * @param username 用户名
-     * @param password 用户密码
      * @return 登录成功返回token，登录失败返回错误信息
      */
     @PostMapping("/login")
-    public Result<Object> login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
+    public Result<Object> login(@RequestBody @Validated UserLoginDTO userLoginDTO) {
         //根据用户名查询用户, 判断用户是否存在
-        String token = userService.login(username, password);
+        String token = userService.login(userLoginDTO);
         //登录成功，返回 token
         return Result.success(token);
     }

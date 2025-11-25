@@ -1,5 +1,6 @@
 package anthony.yublog.service;
 
+import anthony.yublog.dto.UserLoginDTO;
 import anthony.yublog.pojo.User;
 import org.hibernate.validator.constraints.URL;
 
@@ -11,7 +12,7 @@ public interface UserService {
 
     void register(String username, String password);
 
-    String login(String username, String password);
+    String login(UserLoginDTO userLoginDTO);
 
     User userInfo();
 
