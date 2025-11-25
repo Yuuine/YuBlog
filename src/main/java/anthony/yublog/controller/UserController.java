@@ -6,7 +6,6 @@ import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
 import anthony.yublog.utils.ThreadLocalUtil;
-import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +53,7 @@ public class UserController {
      */
     @GetMapping("/userInfo")
     public Result<User> userInfo() {
-        Map<String, Object> claims = ThreadLocalUtil.get();
-        String username = (String) claims.get("username");
-        User user = userService.getUserByUserName(username);
+        User  user = userService.userInfo();
         return Result.success(user);
     }
 
