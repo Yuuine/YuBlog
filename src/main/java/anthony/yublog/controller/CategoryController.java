@@ -1,9 +1,9 @@
 package anthony.yublog.controller;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.dto.CategoryUpdateDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryListDTO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

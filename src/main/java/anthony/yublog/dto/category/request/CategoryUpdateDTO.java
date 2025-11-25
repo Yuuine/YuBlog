@@ -1,4 +1,4 @@
-package anthony.yublog.dto;
+package anthony.yublog.dto.category.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,8 +1,8 @@
 package anthony.yublog.mapper;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryListDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

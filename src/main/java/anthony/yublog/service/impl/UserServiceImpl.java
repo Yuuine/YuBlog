@@ -1,6 +1,6 @@
 package anthony.yublog.service.impl;
 
-import anthony.yublog.dto.UserLoginDTO;
+import anthony.yublog.dto.user.request.UserLoginDTO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;

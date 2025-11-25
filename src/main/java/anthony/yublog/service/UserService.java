@@ -1,6 +1,6 @@
 package anthony.yublog.service;
 
-import anthony.yublog.dto.UserLoginDTO;
+import anthony.yublog.dto.user.request.UserLoginDTO;
 import anthony.yublog.pojo.User;
 import org.hibernate.validator.constraints.URL;
 

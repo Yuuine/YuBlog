@@ -1,7 +1,7 @@
 package anthony.yublog.controller;
 
-import anthony.yublog.dto.UserLoginDTO;
-import anthony.yublog.dto.UserRegisterDTO;
+import anthony.yublog.dto.user.request.UserLoginDTO;
+import anthony.yublog.dto.user.request.UserRegisterDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;

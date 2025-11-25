@@ -1,9 +1,9 @@
 package anthony.yublog.service;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.dto.CategoryUpdateDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryListDTO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 
 import java.util.List;
 
