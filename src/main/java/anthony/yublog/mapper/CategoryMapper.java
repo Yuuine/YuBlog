@@ -2,7 +2,7 @@ package anthony.yublog.mapper;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
 import anthony.yublog.dto.category.request.CategoryDetailDTO;
-import anthony.yublog.dto.category.request.CategoryListDTO;
+import anthony.yublog.dto.category.response.CategoryListVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public interface CategoryMapper {
     void add(CategoryCreateDTO category);
 
     @Select("select * from category where create_user = #{userId}")
-    List<CategoryListDTO> list(Integer userId);
+    List<CategoryListVO> list(Integer userId);
 
     @Select("select * from category where id = #{id}")
     CategoryDetailDTO findById(Integer id);
 
     @Select("select * from category where category_name = #{categoryName} and create_user = #{userId}")
-    List<CategoryListDTO> listByCatNameAndId(String categoryName, Integer userId);
+    List<CategoryListVO> listByCatNameAndId(String categoryName, Integer userId);
 
     @Select("select * from category where category_alias = #{categoryAlias} and create_user = #{currentUserId}")
-    List<CategoryListDTO> listByCatAliasAndId(String categoryAlias, Integer currentUserId);
+    List<CategoryListVO> listByCatAliasAndId(String categoryAlias, Integer currentUserId);
 
     @Delete("delete from category where id = #{id}")
     int delete(Integer id);

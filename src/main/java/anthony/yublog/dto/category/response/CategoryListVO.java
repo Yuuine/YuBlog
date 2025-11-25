@@ -1,4 +1,4 @@
-package anthony.yublog.dto.category.request;
+package anthony.yublog.dto.category.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CategoryListDTO {
+public class CategoryListVO {
 
     @NotNull
     private Integer id;//主键ID

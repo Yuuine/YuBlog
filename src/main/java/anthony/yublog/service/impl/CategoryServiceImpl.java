@@ -2,7 +2,7 @@ package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
 import anthony.yublog.dto.category.request.CategoryDetailDTO;
-import anthony.yublog.dto.category.request.CategoryListDTO;
+import anthony.yublog.dto.category.response.CategoryListVO;
 import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
@@ -61,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryListDTO> list() {
+    public List<CategoryListVO> list() {
         //获取当前用户id
         return categoryMapper.list(getCurrentUserId());
     }
@@ -83,12 +83,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public boolean categoryNameExist(String categoryName, Integer userId) {
-        List<CategoryListDTO> list = categoryMapper.listByCatNameAndId(categoryName, userId);
+        List<CategoryListVO> list = categoryMapper.listByCatNameAndId(categoryName, userId);
         return list != null && !list.isEmpty();
     }
 
     private boolean categoryAliasExist(String categoryAlias, Integer currentUserId) {
-        List<CategoryListDTO> list = categoryMapper.listByCatAliasAndId(categoryAlias, currentUserId);
+        List<CategoryListVO> list = categoryMapper.listByCatAliasAndId(categoryAlias, currentUserId);
         return list != null && !list.isEmpty();
     }
 }

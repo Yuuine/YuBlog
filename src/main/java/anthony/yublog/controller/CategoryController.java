@@ -2,7 +2,7 @@ package anthony.yublog.controller;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
 import anthony.yublog.dto.category.request.CategoryDetailDTO;
-import anthony.yublog.dto.category.request.CategoryListDTO;
+import anthony.yublog.dto.category.response.CategoryListVO;
 import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
@@ -37,8 +37,8 @@ public class CategoryController {
      * 查询用户个人创建的所有文章分类标签
      */
     @GetMapping
-    public Result<List<CategoryListDTO>> list() {
-        List<CategoryListDTO> cs = categoryService.list();
+    public Result<List<CategoryListVO>> list() {
+        List<CategoryListVO> cs = categoryService.list();
         return Result.success(cs);
     }
 
