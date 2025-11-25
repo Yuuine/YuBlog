@@ -32,4 +32,8 @@ public class Result<T> {
         return new Result<>(1, message, null);
     }
 
+    public static Result<Object> error(int code, String message) {
+        return new Result<>(code, message, null);
+    }
+
 }
