@@ -95,6 +95,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User userInfo() {
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        String username = (String) claims.get("username");
+        return getUserByUserName(username);
+    }
+
+    @Override
     public void update(User user) {
         user.setUpdateTime(LocalDateTime.now());
         userMapper.update(user);
