@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
                     e.getMessage());
 
             // 业务异常统一 Result 响应格式
-            Result<Object> result = Result.error(e.getCode(), e.getMessage());
+            Result<Object> result = Result.error(Integer.parseInt(e.getCode()), e.getMessage());
 
             // 返回 400 状态码
             return ResponseEntity.badRequest().body(result);

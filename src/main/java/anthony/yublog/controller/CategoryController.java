@@ -27,12 +27,7 @@ public class CategoryController {
     //TODO: 全局异常处理功能待优化
     @PostMapping
     public Result<Object> add(@RequestBody @Validated CategoryCreateDTO category) {
-        int result = categoryService.add(category);
-        if (result == 1) {
-            return Result.error("分类名称已存在");
-        } else if (result == 2) {
-            return Result.error("分类别名已存在");
-        }
+        categoryService.add(category);
         return Result.success();
     }
 
