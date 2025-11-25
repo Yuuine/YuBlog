@@ -2,6 +2,7 @@ package anthony.yublog.mapper;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
 import anthony.yublog.dto.category.request.CategoryDetailVO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.dto.category.response.CategoryListVO;
 import org.apache.ibatis.annotations.*;
 
@@ -30,6 +31,9 @@ public interface CategoryMapper {
     @Delete("delete from category where id = #{id}")
     int delete(Integer id);
 
-    @Update("update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = now() where id = #{id}")
-    int update(Integer id, String categoryName, String categoryAlias);
+    @Update("update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = #{updateTime} where id = #{id}")
+    void update(CategoryUpdateDTO categoryUpdateDTO);
+
+    @Select("select COUNT(*) > 0 from category where id = #{id}")
+    boolean catExistById(Integer id);
 }

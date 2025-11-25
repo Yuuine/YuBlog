@@ -59,8 +59,8 @@ public class CategoryController {
      */
     @PutMapping
     public Result<Object> update(@RequestBody @Validated CategoryUpdateDTO category) {
-        boolean result = categoryService.update(category);
-        return result ? Result.success() : Result.error("修改失败");
+        categoryService.update(category);
+        return Result.success();
     }
     /**
      * 功能5：

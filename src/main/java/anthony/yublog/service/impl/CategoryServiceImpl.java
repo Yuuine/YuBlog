@@ -32,6 +32,11 @@ public class CategoryServiceImpl implements CategoryService {
         return (Integer) map.get("id");
     }
 
+    /**
+     * 添加分类名称和别名
+     *
+     * @param category 分类
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     //TODO: 并发问题待处理
@@ -77,9 +82,26 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean update(CategoryUpdateDTO category) {
-        return categoryMapper.update(category.getId(), category.getCategoryName(),
-                category.getCategoryAlias()) > 0;
+    public void update(CategoryUpdateDTO category) {
+        if (!categoryIdExist(category.getId())) {
+            throw new BizException(ErrorCode.CATEGORY_NOT_FOUND);
+        } else if (categoryNameExist(category.getCategoryName(), getCurrentUserId())) {
+            throw new BizException(ErrorCode.CATEGORY_NAME_EXISTS);
+        } else if (categoryAliasExist(category.getCategoryAlias(), getCurrentUserId())) {
+            throw new BizException(ErrorCode.CATEGORY_ALIAS_EXISTS);
+        }
+        category.setUpdateTime(LocalDateTime.now());
+        categoryMapper.update(category);
+    }
+
+    /**
+     * 通过分类 Id
+     *
+     * @param id 分类id
+     * @return true:存在 false:不存在
+     */
+    public boolean categoryIdExist(Integer id) {
+        return categoryMapper.catExistById(id);
     }
 
     public boolean categoryNameExist(String categoryName, Integer userId) {

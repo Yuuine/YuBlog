@@ -19,5 +19,5 @@ public interface CategoryService {
 
     boolean delete(Integer id);
 
-    boolean update(CategoryUpdateDTO category);
+    void update(CategoryUpdateDTO category);
 }
