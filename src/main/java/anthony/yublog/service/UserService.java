@@ -5,11 +5,13 @@ import org.hibernate.validator.constraints.URL;
 
 public interface UserService {
 
-    void existByUserName(String username);
+    boolean existByUserName(String username);
 
     User getUserByUserName(String username);
 
     void register(String username, String password);
+
+    String login(String username, String password);
 
     void update(User user);
 

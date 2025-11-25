@@ -3,7 +3,6 @@ package anthony.yublog.controller;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
-import anthony.yublog.utils.JwtUtil;
 import anthony.yublog.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static anthony.yublog.utils.BcryptUtil.matches;
@@ -30,9 +28,6 @@ public class UserController {
 
     @PostMapping("/register")
     public Result<Object> register(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
-
-        //查询用户名是否存在
-        userService.existByUserName(username);
         //用户注册
         userService.register(username, password);
         log.info("用户名查询 username: {}", username);
@@ -40,29 +35,19 @@ public class UserController {
 
     }
 
+    /**
+     * 用户注册
+     *
+     * @param username 用户名
+     * @param password 用户密码
+     * @return 登录成功返回token，登录失败返回错误信息
+     */
     @PostMapping("/login")
     public Result<Object> login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
-        //根据用户名查询用户
-        User loginUser = userService.getUserByUserName(username);
-        //判断用户名是否存在
-        //如果不存在，返回错误信息
-        if (loginUser == null) {
-            return Result.error("用户名或密码错误");
-        }
-        //判断密码是否正确，如果错误，返回密码错误。如果正确，登录成功
-        if (matches(password, loginUser.getPassword())) {
-
-            //生成token
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("id", loginUser.getId());
-            claims.put("username", loginUser.getUsername());
-            String token = JwtUtil.genToken(claims);
-            log.info("用户 {} 登录成功，生成token: {}", username, token);
-            return Result.success(token);
-
-        }
-        log.info("用户 {} 登录失败", username);
-        return Result.error("用户名或密码错误");
+        //根据用户名查询用户, 判断用户是否存在
+        String token = userService.login(username, password);
+        //登录成功，返回 token
+        return Result.success(token);
     }
 
     /**
