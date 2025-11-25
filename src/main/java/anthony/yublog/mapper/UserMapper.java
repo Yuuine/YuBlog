@@ -1,5 +1,6 @@
 package anthony.yublog.mapper;
 
+import anthony.yublog.dto.user.request.UserUpdateDTO;
 import anthony.yublog.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,7 +23,7 @@ public interface UserMapper {
 
     @Update("update user set nickname = #{nickname}, email = #{email}, " +
             "update_time = #{updateTime} where id = #{id} ")
-    void update(User user);
+    void update(UserUpdateDTO userUpdateDTO);
 
     @Update("update user set user_pic = #{avatarUrl}, update_time = now() " +
             "where id = #{idStr}"  )

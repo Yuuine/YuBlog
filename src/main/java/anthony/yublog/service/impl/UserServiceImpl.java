@@ -1,7 +1,9 @@
 package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.user.request.UserLoginDTO;
+import anthony.yublog.dto.user.request.UserUpdateDTO;
 import anthony.yublog.dto.user.response.UserInfoVO;
+import anthony.yublog.dto.user.response.UserUpdateVO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;
@@ -107,10 +109,14 @@ public class UserServiceImpl implements UserService {
         return userInfoVO;
     }
 
+    //TODO: 重复参数校验
     @Override
-    public void update(User user) {
-        user.setUpdateTime(LocalDateTime.now());
-        userMapper.update(user);
+    public UserUpdateVO update(UserUpdateDTO userUpdateDTO) {
+        userUpdateDTO.setUpdateTime(LocalDateTime.now());
+        userMapper.update(userUpdateDTO);
+        UserUpdateVO userUpdateVO = new UserUpdateVO();
+        BeanUtils.copyProperties(userUpdateDTO, userUpdateVO);
+        return userUpdateVO;
     }
 
     @Override

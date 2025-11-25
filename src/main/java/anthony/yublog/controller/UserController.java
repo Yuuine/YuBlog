@@ -2,7 +2,9 @@ package anthony.yublog.controller;
 
 import anthony.yublog.dto.user.request.UserLoginDTO;
 import anthony.yublog.dto.user.request.UserRegisterDTO;
+import anthony.yublog.dto.user.request.UserUpdateDTO;
 import anthony.yublog.dto.user.response.UserInfoVO;
+import anthony.yublog.dto.user.response.UserUpdateVO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
@@ -65,10 +67,10 @@ public class UserController {
      */
 
     @PutMapping("/update")
-    public Result<Object> update(@RequestBody @Validated User user) {
-        userService.update(user);
+    public Result<UserUpdateVO> update(@RequestBody @Validated UserUpdateDTO userUpdateDTO) {
+        UserUpdateVO userUpdateVO = userService.update(userUpdateDTO);
         log.info("用户信息更新成功");
-        return Result.success(user);
+        return Result.success(userUpdateVO);
     }
 
     /**
