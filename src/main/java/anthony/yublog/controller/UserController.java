@@ -2,6 +2,7 @@ package anthony.yublog.controller;
 
 import anthony.yublog.dto.user.request.UserLoginDTO;
 import anthony.yublog.dto.user.request.UserRegisterDTO;
+import anthony.yublog.dto.user.response.UserInfoVO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
@@ -52,9 +53,9 @@ public class UserController {
      * 获取用户信息
      */
     @GetMapping("/userInfo")
-    public Result<User> userInfo() {
-        User  user = userService.userInfo();
-        return Result.success(user);
+    public Result<UserInfoVO> userInfo() {
+        UserInfoVO userInfoVO = userService.userInfo();
+        return Result.success(userInfoVO);
     }
 
     /**

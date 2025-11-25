@@ -1,6 +1,7 @@
 package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.user.request.UserLoginDTO;
+import anthony.yublog.dto.user.response.UserInfoVO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;
@@ -10,6 +11,7 @@ import anthony.yublog.utils.BcryptUtil;
 import anthony.yublog.utils.JwtUtil;
 import anthony.yublog.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,10 +97,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User userInfo() {
+    public UserInfoVO userInfo() {
         Map<String, Object> claims = ThreadLocalUtil.get();
         String username = (String) claims.get("username");
-        return getUserByUserName(username);
+        User user = getUserByUserName(username);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        // 自动复制匹配字段（忽略 password）
+        BeanUtils.copyProperties(user, userInfoVO);
+        return userInfoVO;
     }
 
     @Override
