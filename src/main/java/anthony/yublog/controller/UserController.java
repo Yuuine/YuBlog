@@ -1,5 +1,6 @@
 package anthony.yublog.controller;
 
+import anthony.yublog.dto.UserRegisterDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
@@ -27,10 +28,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Result<Object> register(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
+    public Result<Object> register(UserRegisterDTO userRegisterDTO) {
         //用户注册
-        userService.register(username, password);
-        log.info("用户名查询 username: {}", username);
+        userService.register(userRegisterDTO.getUsername(), userRegisterDTO.getPassword());
+        log.info("用户名查询 username: {}", userRegisterDTO.getUsername());
         return Result.success();
 
     }
