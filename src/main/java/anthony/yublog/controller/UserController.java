@@ -31,25 +31,19 @@ public class UserController {
     @PostMapping("/register")
     public Result<Object> register(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
 
-        //查询用户
-        User user = userService.findByUserName(username);
+        //查询用户名是否存在
+        userService.existByUserName(username);
+        //用户注册
+        userService.register(username, password);
         log.info("用户名查询 username: {}", username);
-        //判断用户名是否存在
-        if (user == null) {
-            //用户名不存在
-            userService.register(username, password);
-            return Result.success();
-        } else {
-            //用户名已存在
-            log.info("用户名已存在 username: {}", username);
-            return Result.error("用户名已存在");
-        }
+        return Result.success();
+
     }
 
     @PostMapping("/login")
     public Result<Object> login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
         //根据用户名查询用户
-        User loginUser = userService.findByUserName(username);
+        User loginUser = userService.getUserByUserName(username);
         //判断用户名是否存在
         //如果不存在，返回错误信息
         if (loginUser == null) {
@@ -78,7 +72,7 @@ public class UserController {
     public Result<User> userInfo() {
         Map<String, Object> claims = ThreadLocalUtil.get();
         String username = (String) claims.get("username");
-        User user = userService.findByUserName(username);
+        User user = userService.getUserByUserName(username);
         return Result.success(user);
     }
 
@@ -111,7 +105,7 @@ public class UserController {
      */
 
     @PatchMapping("/updatePwd")
-    public  Result<Object> updatePwd(@RequestBody Map<String, String> params) {
+    public Result<Object> updatePwd(@RequestBody Map<String, String> params) {
 
         //1. 校验传过来的密码的参数，防止不合法的密码
         String oldPwd = params.get("old_pwd");
@@ -121,11 +115,11 @@ public class UserController {
         if (!StringUtils.hasLength(oldPwd) || !StringUtils.hasLength(newPwd) || !StringUtils.hasLength(rePwd)) {
             return Result.error("缺少必要的参数");
         }
-         //2. 判断旧密码是否正确，不正确不允许修改密码
+        //2. 判断旧密码是否正确，不正确不允许修改密码
         //使用userService通过用户名校验用户输入的旧密码是否和数据库的密码一致
         Map<String, Object> claims = ThreadLocalUtil.get();
         String username = (String) claims.get("username");
-        User user = userService.findByUserName(username);
+        User user = userService.getUserByUserName(username);
         if (!matches(oldPwd, user.getPassword())) {
             log.info("用户 {} 旧密码错误", username);
             return Result.error("旧密码错误");

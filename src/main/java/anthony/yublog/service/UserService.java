@@ -4,7 +4,10 @@ import anthony.yublog.pojo.User;
 import org.hibernate.validator.constraints.URL;
 
 public interface UserService {
-    User findByUserName(String username);
+
+    void existByUserName(String username);
+
+    User getUserByUserName(String username);
 
     void register(String username, String password);
 
