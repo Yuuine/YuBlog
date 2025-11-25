@@ -37,7 +37,7 @@ public class CategoryController {
      * 查询用户个人创建的所有文章分类标签
      */
     @GetMapping
-    public Result<Object> list() {
+    public Result<List<CategoryListDTO>> list() {
         List<CategoryListDTO> cs = categoryService.list();
         return Result.success(cs);
     }

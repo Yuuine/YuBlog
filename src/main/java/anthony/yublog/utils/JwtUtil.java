@@ -47,7 +47,8 @@ public final class JwtUtil {
         }
 
         return JWT.create().withClaim("claims", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime)).withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
+                .withIssuedAt(new Date())
                 .sign(Algorithm.HMAC256(secretKey));
     }
 

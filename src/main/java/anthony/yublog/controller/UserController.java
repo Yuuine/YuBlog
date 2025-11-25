@@ -1,9 +1,9 @@
 package anthony.yublog.controller;
 
+import anthony.yublog.dto.UserRegisterDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
-import anthony.yublog.utils.JwtUtil;
 import anthony.yublog.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static anthony.yublog.utils.BcryptUtil.matches;
@@ -29,46 +28,27 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Result<Object> register(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
+    public Result<Object> register(UserRegisterDTO userRegisterDTO) {
+        //用户注册
+        userService.register(userRegisterDTO.getUsername(), userRegisterDTO.getPassword());
+        log.info("用户名查询 username: {}", userRegisterDTO.getUsername());
+        return Result.success();
 
-        //查询用户
-        User user = userService.findByUserName(username);
-        log.info("用户名查询 username: {}", username);
-        //判断用户名是否存在
-        if (user == null) {
-            //用户名不存在
-            userService.register(username, password);
-            return Result.success();
-        } else {
-            //用户名已存在
-            log.info("用户名已存在 username: {}", username);
-            return Result.error("用户名已存在");
-        }
     }
 
+    /**
+     * 用户注册
+     *
+     * @param username 用户名
+     * @param password 用户密码
+     * @return 登录成功返回token，登录失败返回错误信息
+     */
     @PostMapping("/login")
     public Result<Object> login(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
-        //根据用户名查询用户
-        User loginUser = userService.findByUserName(username);
-        //判断用户名是否存在
-        //如果不存在，返回错误信息
-        if (loginUser == null) {
-            return Result.error("用户名或密码错误");
-        }
-        //判断密码是否正确，如果错误，返回密码错误。如果正确，登录成功
-        if (matches(password, loginUser.getPassword())) {
-
-            //生成token
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("id", loginUser.getId());
-            claims.put("username", loginUser.getUsername());
-            String token = JwtUtil.genToken(claims);
-            log.info("用户 {} 登录成功，生成token: {}", username, token);
-            return Result.success(token);
-
-        }
-        log.info("用户 {} 登录失败", username);
-        return Result.error("用户名或密码错误");
+        //根据用户名查询用户, 判断用户是否存在
+        String token = userService.login(username, password);
+        //登录成功，返回 token
+        return Result.success(token);
     }
 
     /**
@@ -78,7 +58,7 @@ public class UserController {
     public Result<User> userInfo() {
         Map<String, Object> claims = ThreadLocalUtil.get();
         String username = (String) claims.get("username");
-        User user = userService.findByUserName(username);
+        User user = userService.getUserByUserName(username);
         return Result.success(user);
     }
 
@@ -111,7 +91,7 @@ public class UserController {
      */
 
     @PatchMapping("/updatePwd")
-    public  Result<Object> updatePwd(@RequestBody Map<String, String> params) {
+    public Result<Object> updatePwd(@RequestBody Map<String, String> params) {
 
         //1. 校验传过来的密码的参数，防止不合法的密码
         String oldPwd = params.get("old_pwd");
@@ -121,11 +101,11 @@ public class UserController {
         if (!StringUtils.hasLength(oldPwd) || !StringUtils.hasLength(newPwd) || !StringUtils.hasLength(rePwd)) {
             return Result.error("缺少必要的参数");
         }
-         //2. 判断旧密码是否正确，不正确不允许修改密码
+        //2. 判断旧密码是否正确，不正确不允许修改密码
         //使用userService通过用户名校验用户输入的旧密码是否和数据库的密码一致
         Map<String, Object> claims = ThreadLocalUtil.get();
         String username = (String) claims.get("username");
-        User user = userService.findByUserName(username);
+        User user = userService.getUserByUserName(username);
         if (!matches(oldPwd, user.getPassword())) {
             log.info("用户 {} 旧密码错误", username);
             return Result.error("旧密码错误");

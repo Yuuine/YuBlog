@@ -1,15 +1,19 @@
 package anthony.yublog.service.impl;
 
+import anthony.yublog.exception.BizException;
+import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;
 import anthony.yublog.pojo.User;
 import anthony.yublog.service.UserService;
 import anthony.yublog.utils.BcryptUtil;
+import anthony.yublog.utils.JwtUtil;
 import anthony.yublog.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -19,24 +23,74 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * 判断用户名是否存在
+     *
+     * @param username 用户名
+     * @return 用户名存在返回 true，不存在返回 false
+     */
     @Override
-    public User findByUserName(String username) {
-        return userMapper.findByUserName(username);
+    public boolean existByUserName(String username) {
+        return userMapper.existByUserName(username);
     }
 
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username 用户名
+     * @return 用户对象
+     */
+    @Override
+    public User getUserByUserName(String username) {
+        User user = userMapper.getUserByUserName(username);
+        if (user == null) {
+            throw new BizException(ErrorCode.USER_NOT_FOUND);
+        }
+        return user;
+    }
+
+    /**
+     * 用户注册
+     *
+     * @param username 用户名
+     * @param password 密码
+     */
     @Override
     public void register(String username, String password) {
-
+        if (existByUserName(username)) {
+            throw new BizException(ErrorCode.USER_ALREADY_EXISTS);
+        }
         //密码加密
-        /**
-         * 使用Spring Security 内置支持的加密工具类Bcrypt
-         * 封装bcryptUtil工具类，用于明文密码加密
-         * 使用bcryptUtil的encode方法对密码进行加密
+        /*
+          使用Spring Security 内置支持的加密工具类Bcrypt
+          封装bcryptUtil工具类，用于明文密码加密
+          使用bcryptUtil的encode方法对密码进行加密
          */
         String bcryptPassword = BcryptUtil.encode(password);
-        log.info("用户名: {}", username);
-        log.info("生成密文: {}", bcryptPassword);
         userMapper.add(username, bcryptPassword);
+    }
+
+    /**
+     * 用户登录
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return token 登录成功返回token
+     */
+    public String login(String username, String password) {
+        User loginUser = getUserByUserName(username);
+        //根据用户名查询用户是否存在
+        if (loginUser == null) {
+            throw new BizException(ErrorCode.USER_NOT_FOUND);
+        }
+        //用户密码验证
+        if (!BcryptUtil.matches(password, loginUser.getPassword())) {
+            throw new BizException(ErrorCode.USER_OR_PASSWORD_ERROR);
+        }
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", loginUser.getId());
+        claims.put("username", username);
+        return JwtUtil.genToken(claims);
     }
 
     @Override
