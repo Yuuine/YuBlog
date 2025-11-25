@@ -1,7 +1,7 @@
 package anthony.yublog.controller;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
-import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
 import anthony.yublog.dto.category.response.CategoryListVO;
 import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.pojo.Result;
@@ -48,8 +48,8 @@ public class CategoryController {
      * 根据文章分类标签id查询文章分类标签详情，两个字段：1. 分类标签名称 2. 分类标签别名
      */
     @GetMapping("/detail")
-    public Result<CategoryDetailDTO> detail(Integer id) {
-        CategoryDetailDTO c = categoryService.findById(id);
+    public Result<CategoryDetailVO> detail(Integer id) {
+        CategoryDetailVO c = categoryService.findById(id);
         return Result.success(c);
     }
 

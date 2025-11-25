@@ -1,7 +1,7 @@
 package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
-import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
 import anthony.yublog.dto.category.response.CategoryListVO;
 import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.exception.BizException;
@@ -67,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDetailDTO findById(Integer id) {
+    public CategoryDetailVO findById(Integer id) {
         return categoryMapper.findById(id);
     }
 

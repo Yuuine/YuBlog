@@ -1,7 +1,7 @@
 package anthony.yublog.service;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
-import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
 import anthony.yublog.dto.category.response.CategoryListVO;
 import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 
@@ -15,7 +15,7 @@ public interface CategoryService {
     List<CategoryListVO> list();
 
     //根据id查询
-    CategoryDetailDTO findById(Integer id);
+    CategoryDetailVO findById(Integer id);
 
     boolean delete(Integer id);
 

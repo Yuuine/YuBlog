@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CategoryDetailDTO {
+public class CategoryDetailVO {
 
     @NotNull
     private Integer id;

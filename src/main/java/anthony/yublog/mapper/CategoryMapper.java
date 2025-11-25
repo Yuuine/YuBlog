@@ -1,7 +1,7 @@
 package anthony.yublog.mapper;
 
 import anthony.yublog.dto.category.request.CategoryCreateDTO;
-import anthony.yublog.dto.category.request.CategoryDetailDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
 import anthony.yublog.dto.category.response.CategoryListVO;
 import org.apache.ibatis.annotations.*;
 
@@ -19,7 +19,7 @@ public interface CategoryMapper {
     List<CategoryListVO> list(Integer userId);
 
     @Select("select * from category where id = #{id}")
-    CategoryDetailDTO findById(Integer id);
+    CategoryDetailVO findById(Integer id);
 
     @Select("select * from category where category_name = #{categoryName} and create_user = #{userId}")
     List<CategoryListVO> listByCatNameAndId(String categoryName, Integer userId);
