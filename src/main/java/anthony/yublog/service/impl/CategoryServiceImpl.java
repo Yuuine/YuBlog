@@ -77,8 +77,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean delete(Integer id) {
-        return categoryMapper.delete(id) > 0;
+    public void delete(Integer id) {
+        if (categoryIdExist(id)) {
+            throw new BizException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
+        Integer count = categoryMapper.delete(id);
+        if (count == 0) {
+            throw new BizException(ErrorCode.CATEGORY_DELETE_FAILED);
+        }
     }
 
     /**
@@ -89,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void update(CategoryUpdateDTO category) {
         Integer categoryId = category.getId();
-        if (!categoryIdExist(categoryId)) {
+        if (categoryIdExist(categoryId)) {
             throw new BizException(ErrorCode.CATEGORY_NOT_FOUND);
         }
         category.setUpdateTime(LocalDateTime.now());
@@ -104,7 +110,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     public boolean categoryIdExist(Integer id) {
         log.info("正在检查分类id：{}", id);
-        return categoryMapper.catExistById(id);
+        return !categoryMapper.catExistById(id);
     }
 
     /**

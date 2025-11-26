@@ -29,7 +29,7 @@ public interface CategoryMapper {
     Integer catExistByAliasAndId(String categoryAlias, Integer userId);
 
     @Delete("delete from category where id = #{id}")
-    int delete(Integer id);
+    Integer delete(Integer id);
 
     @Update("update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = #{updateTime} where id = #{id}")
     void update(CategoryUpdateDTO categoryUpdateDTO);

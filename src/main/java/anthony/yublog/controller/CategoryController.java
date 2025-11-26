@@ -68,7 +68,7 @@ public class CategoryController {
      */
     @DeleteMapping("/{id}")
     public Result<Object> delete(@PathVariable Integer id) {
-        boolean result = categoryService.delete(id);
-        return result ? Result.success() : Result.error("删除失败");
+        categoryService.delete(id);
+        return Result.success();
     }
 }

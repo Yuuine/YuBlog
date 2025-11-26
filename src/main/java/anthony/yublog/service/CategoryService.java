@@ -17,7 +17,7 @@ public interface CategoryService {
     //根据id查询
     CategoryDetailVO findById(Integer id);
 
-    boolean delete(Integer id);
+    void delete(Integer id);
 
     void update(CategoryUpdateDTO category);
 }
