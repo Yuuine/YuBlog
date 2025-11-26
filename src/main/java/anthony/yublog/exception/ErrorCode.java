@@ -41,6 +41,9 @@ public enum ErrorCode {
     USER_REGISTRATION_FAILED(1009, "用户注册失败"),
     PASSWORD_RESET_FAILED(10010, "密码重置失败"),
     PROFILE_UPDATE_FAILED(1011, "个人信息更新失败"),
+    USER_PASSWORD_MISMATCH(1010, "原密码与新密码一致"),
+    PASSWORDS_NOT_MATCH(1101, "两次密码不一致"),
+    NEW_PASSWORD_SAME_AS_OLD(1102, "新密码不能和旧密码一致"),
 
     // 文章相关错误 (2000~2999)
     POST_NOT_FOUND(2001, "文章不存在"),

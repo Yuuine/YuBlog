@@ -1,4 +1,4 @@
-package anthony.yublog.dto;
+package anthony.yublog.dto.category.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CategoryDetailDTO {
+public class CategoryDetailVO {
 
     @NotNull
     private Integer id;

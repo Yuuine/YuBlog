@@ -1,6 +1,10 @@
 package anthony.yublog.service.impl;
 
-import anthony.yublog.dto.UserLoginDTO;
+import anthony.yublog.dto.user.request.UserLoginDTO;
+import anthony.yublog.dto.user.request.UserUpdateDTO;
+import anthony.yublog.dto.user.request.UserUpdatePasDTO;
+import anthony.yublog.dto.user.response.UserInfoVO;
+import anthony.yublog.dto.user.response.UserUpdateVO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;
@@ -10,6 +14,7 @@ import anthony.yublog.utils.BcryptUtil;
 import anthony.yublog.utils.JwtUtil;
 import anthony.yublog.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,16 +100,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User userInfo() {
+    public UserInfoVO userInfo() {
         Map<String, Object> claims = ThreadLocalUtil.get();
         String username = (String) claims.get("username");
-        return getUserByUserName(username);
+        User user = getUserByUserName(username);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        // 自动复制匹配字段（忽略 password）
+        BeanUtils.copyProperties(user, userInfoVO);
+        return userInfoVO;
     }
 
+    //TODO: 重复参数校验
     @Override
-    public void update(User user) {
-        user.setUpdateTime(LocalDateTime.now());
-        userMapper.update(user);
+    public UserUpdateVO update(UserUpdateDTO userUpdateDTO) {
+        userUpdateDTO.setUpdateTime(LocalDateTime.now());
+        userMapper.update(userUpdateDTO);
+        UserUpdateVO userUpdateVO = new UserUpdateVO();
+        BeanUtils.copyProperties(userUpdateDTO, userUpdateVO);
+        return userUpdateVO;
     }
 
     @Override
@@ -116,12 +129,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePwd(String newPwd) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Object id = map.get("id");
-        Integer idStr = Integer.valueOf(id.toString());
-        //密码加密
-        String bcryptPassword = BcryptUtil.encode(newPwd);
-        userMapper.updatePwd(bcryptPassword, idStr);
+    public void updatePwd(UserUpdatePasDTO userUpdatePasDTO) {
+        String newPwd = userUpdatePasDTO.getNewPwd();
+        String oldPwd = userUpdatePasDTO.getOldPwd();
+        String rePwd = userUpdatePasDTO.getRePwd();
+        Map<String, Object> claim = ThreadLocalUtil.get();
+        //判断旧密码是否正确
+        String username = (String) claim.get("username");
+        String originalPassword = userMapper.getPasswordByUserName(username);
+        if (!BcryptUtil.matches(oldPwd, originalPassword)) {
+            throw new BizException(ErrorCode.USER_OR_PASSWORD_ERROR);
+        }
+        //判断新密码是否一致
+        if (!newPwd.equals(rePwd)) {
+            throw new BizException(ErrorCode.PASSWORDS_NOT_MATCH);
+        }
+        if (newPwd.equals(oldPwd)) {
+            throw new BizException(ErrorCode.NEW_PASSWORD_SAME_AS_OLD);
+        }
+        //校验通过，新密码加密, 更新密码
+        String bcryptNewPassword = BcryptUtil.encode(newPwd);
+        Integer userId = Integer.valueOf(claim.get("id").toString());
+        userMapper.updatePwd(bcryptNewPassword, userId);
     }
 }

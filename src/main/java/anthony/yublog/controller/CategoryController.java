@@ -1,9 +1,9 @@
 package anthony.yublog.controller;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.dto.CategoryUpdateDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
+import anthony.yublog.dto.category.response.CategoryListVO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.pojo.Result;
 import anthony.yublog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +37,8 @@ public class CategoryController {
      * 查询用户个人创建的所有文章分类标签
      */
     @GetMapping
-    public Result<List<CategoryListDTO>> list() {
-        List<CategoryListDTO> cs = categoryService.list();
+    public Result<List<CategoryListVO>> list() {
+        List<CategoryListVO> cs = categoryService.list();
         return Result.success(cs);
     }
 
@@ -48,8 +48,8 @@ public class CategoryController {
      * 根据文章分类标签id查询文章分类标签详情，两个字段：1. 分类标签名称 2. 分类标签别名
      */
     @GetMapping("/detail")
-    public Result<CategoryDetailDTO> detail(Integer id) {
-        CategoryDetailDTO c = categoryService.findById(id);
+    public Result<CategoryDetailVO> detail(Integer id) {
+        CategoryDetailVO c = categoryService.findById(id);
         return Result.success(c);
     }
 
@@ -59,8 +59,8 @@ public class CategoryController {
      */
     @PutMapping
     public Result<Object> update(@RequestBody @Validated CategoryUpdateDTO category) {
-        boolean result = categoryService.update(category);
-        return result ? Result.success() : Result.error("修改失败");
+        categoryService.update(category);
+        return Result.success();
     }
     /**
      * 功能5：
@@ -68,7 +68,7 @@ public class CategoryController {
      */
     @DeleteMapping("/{id}")
     public Result<Object> delete(@PathVariable Integer id) {
-        boolean result = categoryService.delete(id);
-        return result ? Result.success() : Result.error("删除失败");
+        categoryService.delete(id);
+        return Result.success();
     }
 }

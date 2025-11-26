@@ -1,8 +1,9 @@
 package anthony.yublog.mapper;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
+import anthony.yublog.dto.category.response.CategoryListVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -16,20 +17,23 @@ public interface CategoryMapper {
     void add(CategoryCreateDTO category);
 
     @Select("select * from category where create_user = #{userId}")
-    List<CategoryListDTO> list(Integer userId);
+    List<CategoryListVO> list(Integer userId);
 
     @Select("select * from category where id = #{id}")
-    CategoryDetailDTO findById(Integer id);
+    CategoryDetailVO findById(Integer id);
 
-    @Select("select * from category where category_name = #{categoryName} and create_user = #{userId}")
-    List<CategoryListDTO> listByCatNameAndId(String categoryName, Integer userId);
+    @Select("select 1 from category where category_name = #{categoryName} and create_user = #{userId} limit 1")
+    Integer catExistByNameAndId(String categoryName, Integer userId);
 
-    @Select("select * from category where category_alias = #{categoryAlias} and create_user = #{currentUserId}")
-    List<CategoryListDTO> listByCatAliasAndId(String categoryAlias, Integer currentUserId);
+    @Select("select 1 from category where category_alias = #{categoryAlias} and create_user = #{userId} limit 1")
+    Integer catExistByAliasAndId(String categoryAlias, Integer userId);
 
     @Delete("delete from category where id = #{id}")
-    int delete(Integer id);
+    Integer delete(Integer id);
 
-    @Update("update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = now() where id = #{id}")
-    int update(Integer id, String categoryName, String categoryAlias);
+    @Update("update category set category_name = #{categoryName}, category_alias = #{categoryAlias}, update_time = #{updateTime} where id = #{id}")
+    void update(CategoryUpdateDTO categoryUpdateDTO);
+
+    @Select("select COUNT(*) > 0 from category where id = #{id}")
+    boolean catExistById(Integer id);
 }

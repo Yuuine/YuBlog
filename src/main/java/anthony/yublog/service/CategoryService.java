@@ -1,9 +1,9 @@
 package anthony.yublog.service;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.dto.CategoryUpdateDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
+import anthony.yublog.dto.category.response.CategoryListVO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 
 import java.util.List;
 
@@ -12,12 +12,12 @@ public interface CategoryService {
     void add(CategoryCreateDTO category);
 
     //列表查询
-    List<CategoryListDTO> list();
+    List<CategoryListVO> list();
 
     //根据id查询
-    CategoryDetailDTO findById(Integer id);
+    CategoryDetailVO findById(Integer id);
 
-    boolean delete(Integer id);
+    void delete(Integer id);
 
-    boolean update(CategoryUpdateDTO category);
+    void update(CategoryUpdateDTO category);
 }

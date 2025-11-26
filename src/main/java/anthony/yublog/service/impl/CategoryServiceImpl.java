@@ -1,9 +1,9 @@
 package anthony.yublog.service.impl;
 
-import anthony.yublog.dto.CategoryCreateDTO;
-import anthony.yublog.dto.CategoryDetailDTO;
-import anthony.yublog.dto.CategoryListDTO;
-import anthony.yublog.dto.CategoryUpdateDTO;
+import anthony.yublog.dto.category.request.CategoryCreateDTO;
+import anthony.yublog.dto.category.request.CategoryDetailVO;
+import anthony.yublog.dto.category.response.CategoryListVO;
+import anthony.yublog.dto.category.request.CategoryUpdateDTO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.CategoryMapper;
@@ -32,6 +32,11 @@ public class CategoryServiceImpl implements CategoryService {
         return (Integer) map.get("id");
     }
 
+    /**
+     * 添加分类名称和别名
+     *
+     * @param category 分类
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     //TODO: 并发问题待处理
@@ -61,34 +66,74 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryListDTO> list() {
+    public List<CategoryListVO> list() {
         //获取当前用户id
         return categoryMapper.list(getCurrentUserId());
     }
 
     @Override
-    public CategoryDetailDTO findById(Integer id) {
+    public CategoryDetailVO findById(Integer id) {
         return categoryMapper.findById(id);
     }
 
     @Override
-    public boolean delete(Integer id) {
-        return categoryMapper.delete(id) > 0;
+    public void delete(Integer id) {
+        if (categoryIdExist(id)) {
+            throw new BizException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
+        Integer count = categoryMapper.delete(id);
+        if (count == 0) {
+            throw new BizException(ErrorCode.CATEGORY_DELETE_FAILED);
+        }
     }
 
+    /**
+     * 修改分类名称和别名
+     *
+     * @param category 分类
+     */
     @Override
-    public boolean update(CategoryUpdateDTO category) {
-        return categoryMapper.update(category.getId(), category.getCategoryName(),
-                category.getCategoryAlias()) > 0;
+    public void update(CategoryUpdateDTO category) {
+        Integer categoryId = category.getId();
+        if (categoryIdExist(categoryId)) {
+            throw new BizException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
+        category.setUpdateTime(LocalDateTime.now());
+        categoryMapper.update(category);
     }
 
+    /**
+     * 通过分类 Id
+     *
+     * @param id 分类id
+     * @return true:存在 false:不存在
+     */
+    public boolean categoryIdExist(Integer id) {
+        log.info("正在检查分类id：{}", id);
+        return !categoryMapper.catExistById(id);
+    }
+
+    /**
+     * 通过分类名称
+     *
+     * @param categoryName 分类名称
+     * @return true:存在 false:不存在
+     */
     public boolean categoryNameExist(String categoryName, Integer userId) {
-        List<CategoryListDTO> list = categoryMapper.listByCatNameAndId(categoryName, userId);
-        return list != null && !list.isEmpty();
+        log.info("正在检查分类名称：{}", categoryName);
+        Integer count = categoryMapper.catExistByNameAndId(categoryName, userId);
+        return count != null;
     }
 
-    private boolean categoryAliasExist(String categoryAlias, Integer currentUserId) {
-        List<CategoryListDTO> list = categoryMapper.listByCatAliasAndId(categoryAlias, currentUserId);
-        return list != null && !list.isEmpty();
+    /**
+     * 通过分类别名
+     *
+     * @param categoryAlias 分类别名
+     * @return true:存在 false:不存在
+     */
+    private boolean categoryAliasExist(String categoryAlias, Integer userId) {
+        log.info("正在检查分类别名：{}", categoryAlias);
+        Integer count = categoryMapper.catExistByAliasAndId(categoryAlias, userId);
+        return count != null;
     }
 }
