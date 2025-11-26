@@ -81,14 +81,16 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.delete(id) > 0;
     }
 
+    /**
+     * 修改分类名称和别名
+     *
+     * @param category 分类
+     */
     @Override
     public void update(CategoryUpdateDTO category) {
-        if (!categoryIdExist(category.getId())) {
+        Integer categoryId = category.getId();
+        if (!categoryIdExist(categoryId)) {
             throw new BizException(ErrorCode.CATEGORY_NOT_FOUND);
-        } else if (categoryNameExist(category.getCategoryName(), getCurrentUserId())) {
-            throw new BizException(ErrorCode.CATEGORY_NAME_EXISTS);
-        } else if (categoryAliasExist(category.getCategoryAlias(), getCurrentUserId())) {
-            throw new BizException(ErrorCode.CATEGORY_ALIAS_EXISTS);
         }
         category.setUpdateTime(LocalDateTime.now());
         categoryMapper.update(category);
@@ -101,16 +103,31 @@ public class CategoryServiceImpl implements CategoryService {
      * @return true:存在 false:不存在
      */
     public boolean categoryIdExist(Integer id) {
+        log.info("正在检查分类id：{}", id);
         return categoryMapper.catExistById(id);
     }
 
+    /**
+     * 通过分类名称
+     *
+     * @param categoryName 分类名称
+     * @return true:存在 false:不存在
+     */
     public boolean categoryNameExist(String categoryName, Integer userId) {
-        List<CategoryListVO> list = categoryMapper.listByCatNameAndId(categoryName, userId);
-        return list != null && !list.isEmpty();
+        log.info("正在检查分类名称：{}", categoryName);
+        Integer count = categoryMapper.catExistByNameAndId(categoryName, userId);
+        return count != null;
     }
 
-    private boolean categoryAliasExist(String categoryAlias, Integer currentUserId) {
-        List<CategoryListVO> list = categoryMapper.listByCatAliasAndId(categoryAlias, currentUserId);
-        return list != null && !list.isEmpty();
+    /**
+     * 通过分类别名
+     *
+     * @param categoryAlias 分类别名
+     * @return true:存在 false:不存在
+     */
+    private boolean categoryAliasExist(String categoryAlias, Integer userId) {
+        log.info("正在检查分类别名：{}", categoryAlias);
+        Integer count = categoryMapper.catExistByAliasAndId(categoryAlias, userId);
+        return count != null;
     }
 }

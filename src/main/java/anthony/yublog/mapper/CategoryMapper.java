@@ -22,11 +22,11 @@ public interface CategoryMapper {
     @Select("select * from category where id = #{id}")
     CategoryDetailVO findById(Integer id);
 
-    @Select("select * from category where category_name = #{categoryName} and create_user = #{userId}")
-    List<CategoryListVO> listByCatNameAndId(String categoryName, Integer userId);
+    @Select("select 1 from category where category_name = #{categoryName} and create_user = #{userId} limit 1")
+    Integer catExistByNameAndId(String categoryName, Integer userId);
 
-    @Select("select * from category where category_alias = #{categoryAlias} and create_user = #{currentUserId}")
-    List<CategoryListVO> listByCatAliasAndId(String categoryAlias, Integer currentUserId);
+    @Select("select 1 from category where category_alias = #{categoryAlias} and create_user = #{userId} limit 1")
+    Integer catExistByAliasAndId(String categoryAlias, Integer userId);
 
     @Delete("delete from category where id = #{id}")
     int delete(Integer id);
