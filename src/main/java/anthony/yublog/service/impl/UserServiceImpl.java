@@ -2,6 +2,7 @@ package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.user.request.UserLoginDTO;
 import anthony.yublog.dto.user.request.UserUpdateDTO;
+import anthony.yublog.dto.user.request.UserUpdatePasDTO;
 import anthony.yublog.dto.user.response.UserInfoVO;
 import anthony.yublog.dto.user.response.UserUpdateVO;
 import anthony.yublog.exception.BizException;
@@ -128,12 +129,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePwd(String newPwd) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Object id = map.get("id");
-        Integer idStr = Integer.valueOf(id.toString());
-        //密码加密
-        String bcryptPassword = BcryptUtil.encode(newPwd);
-        userMapper.updatePwd(bcryptPassword, idStr);
+    public void updatePwd(UserUpdatePasDTO userUpdatePasDTO) {
+        String newPwd = userUpdatePasDTO.getNewPwd();
+        String oldPwd = userUpdatePasDTO.getOldPwd();
+        String rePwd = userUpdatePasDTO.getRePwd();
+        Map<String, Object> claim = ThreadLocalUtil.get();
+        //判断旧密码是否正确
+        String username = (String) claim.get("username");
+        String originalPassword = userMapper.getPasswordByUserName(username);
+        if (!BcryptUtil.matches(oldPwd, originalPassword)) {
+            throw new BizException(ErrorCode.USER_OR_PASSWORD_ERROR);
+        }
+        //判断新密码是否一致
+        if (!newPwd.equals(rePwd)) {
+            throw new BizException(ErrorCode.PASSWORDS_NOT_MATCH);
+        }
+        if (newPwd.equals(oldPwd)) {
+            throw new BizException(ErrorCode.NEW_PASSWORD_SAME_AS_OLD);
+        }
+        //校验通过，新密码加密, 更新密码
+        String bcryptNewPassword = BcryptUtil.encode(newPwd);
+        Integer userId = Integer.valueOf(claim.get("id").toString());
+        userMapper.updatePwd(bcryptNewPassword, userId);
     }
 }

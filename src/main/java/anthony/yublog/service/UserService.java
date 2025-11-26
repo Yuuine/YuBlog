@@ -2,6 +2,7 @@ package anthony.yublog.service;
 
 import anthony.yublog.dto.user.request.UserLoginDTO;
 import anthony.yublog.dto.user.request.UserUpdateDTO;
+import anthony.yublog.dto.user.request.UserUpdatePasDTO;
 import anthony.yublog.dto.user.response.UserInfoVO;
 import anthony.yublog.dto.user.response.UserUpdateVO;
 import anthony.yublog.pojo.User;
@@ -23,5 +24,5 @@ public interface UserService {
 
     void updateAvatar(@URL String avatarUrl);
 
-    void updatePwd(String newPwd);
+    void updatePwd(UserUpdatePasDTO userUpdatePasDTO);
 }
