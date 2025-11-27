@@ -4,6 +4,7 @@ import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.entity.Article;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -25,4 +26,7 @@ public interface ArticleMapper {
     @Insert("update article set title = #{title}, content = #{content}, cover_img = #{coverImg}, state = #{state}, " +
             "update_time = #{updateTime} where id = #{id}")
     void updateArticle(ArticleUpdateDTO articleUpdateDTO);
+
+    @Delete("delete from article where id = #{id}")
+    void delete(Integer id);
 }

@@ -8,6 +8,8 @@ import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
 import anthony.yublog.entity.Article;
 import anthony.yublog.enums.ArticleStatus;
+import anthony.yublog.exception.BizException;
+import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.ArticleMapper;
 import anthony.yublog.service.ArticleService;
 import anthony.yublog.utils.ThreadLocalUtil;
@@ -113,5 +115,15 @@ public class ArticleServiceImpl implements ArticleService {
         articleUpdateDTO.setUpdateTime(LocalDateTime.now());
         articleMapper.updateArticle(articleUpdateDTO);
 
+    }
+
+    /**
+     * 删除文章
+     *
+     * @param id 文章ID
+     */
+    @Override
+    public void delete(Integer id) {
+        articleMapper.delete(id);
     }
 }

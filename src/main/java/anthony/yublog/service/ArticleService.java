@@ -16,4 +16,6 @@ public interface ArticleService {
     ArticleDetailVO findById(Integer id);
 
     void updateArticle(ArticleUpdateDTO articleUpdateDTO);
+
+    void delete(Integer id);
 }

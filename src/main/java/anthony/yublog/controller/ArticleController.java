@@ -49,4 +49,11 @@ public class ArticleController {
         log.info("修改文章");
         return Result.success();
     }
+
+    @DeleteMapping("/{id}")
+    public Result<Object> delete(@PathVariable Integer id) {
+        articleService.delete(id);
+        log.info("删除文章");
+        return Result.success();
+    }
 }
