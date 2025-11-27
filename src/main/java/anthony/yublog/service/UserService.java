@@ -5,7 +5,7 @@ import anthony.yublog.dto.user.request.UserUpdateDTO;
 import anthony.yublog.dto.user.request.UserUpdatePasDTO;
 import anthony.yublog.dto.user.response.UserInfoVO;
 import anthony.yublog.dto.user.response.UserUpdateVO;
-import anthony.yublog.pojo.User;
+import anthony.yublog.entity.User;
 import org.hibernate.validator.constraints.URL;
 
 public interface UserService {

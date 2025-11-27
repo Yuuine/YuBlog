@@ -6,7 +6,7 @@ import anthony.yublog.dto.user.request.UserUpdateDTO;
 import anthony.yublog.dto.user.request.UserUpdatePasDTO;
 import anthony.yublog.dto.user.response.UserInfoVO;
 import anthony.yublog.dto.user.response.UserUpdateVO;
-import anthony.yublog.pojo.Result;
+import anthony.yublog.entity.Result;
 import anthony.yublog.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.URL;

@@ -1,7 +1,7 @@
 package anthony.yublog.mapper;
 
 import anthony.yublog.dto.user.request.UserUpdateDTO;
-import anthony.yublog.pojo.User;
+import anthony.yublog.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

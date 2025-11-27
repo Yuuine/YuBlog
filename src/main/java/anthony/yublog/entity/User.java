@@ -1,4 +1,4 @@
-package anthony.yublog.pojo;
+package anthony.yublog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
