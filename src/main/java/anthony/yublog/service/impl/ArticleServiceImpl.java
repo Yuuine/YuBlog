@@ -2,6 +2,7 @@ package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.article.request.ArticleAddDTO;
 import anthony.yublog.dto.article.request.ArticleListDTO;
+import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
 import anthony.yublog.entity.Article;
@@ -88,5 +89,16 @@ public class ArticleServiceImpl implements ArticleService {
         articleListVO.setItems(pageInfo.getList());
 
         return articleListVO;
+    }
+
+    /**
+     * 根据ID查询文章详情
+     *
+     * @param id 文章ID
+     * @return 文章详情
+     */
+    @Override
+    public ArticleDetailVO findById(Integer id) {
+        return articleMapper.findById(id);
     }
 }
