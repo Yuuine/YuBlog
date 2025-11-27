@@ -2,10 +2,14 @@ package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.article.request.ArticleAddDTO;
 import anthony.yublog.dto.article.request.ArticleListDTO;
+import anthony.yublog.dto.article.request.ArticleUpdateDTO;
+import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
 import anthony.yublog.entity.Article;
 import anthony.yublog.enums.ArticleStatus;
+import anthony.yublog.exception.BizException;
+import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.ArticleMapper;
 import anthony.yublog.service.ArticleService;
 import anthony.yublog.utils.ThreadLocalUtil;
@@ -88,5 +92,51 @@ public class ArticleServiceImpl implements ArticleService {
         articleListVO.setItems(pageInfo.getList());
 
         return articleListVO;
+    }
+
+    /**
+     * 根据ID查询文章详情
+     *
+     * @param id 文章ID
+     * @return 文章详情
+     */
+    @Override
+    public ArticleDetailVO findById(Integer id) {
+        return articleMapper.findById(id);
+    }
+
+    /**
+     * 修改文章
+     *
+     * @param articleUpdateDTO 修改信息
+     */
+    @Override
+    public void updateArticle(ArticleUpdateDTO articleUpdateDTO) {
+        articleUpdateDTO.setUpdateTime(LocalDateTime.now());
+        articleMapper.updateArticle(articleUpdateDTO);
+
+    }
+
+    /**
+     * 删除文章
+     *
+     * @param id 文章ID
+     */
+    @Override
+    public void delete(Integer id) {
+        int deletedRows = articleMapper.delete(id);
+        if (deletedRows == 0) {
+            throw new BizException(ErrorCode.POST_NOT_FOUND);
+        }
+    }
+
+    /**
+     * 判断文章ID是否存在
+     *
+     * @param id 文章ID
+     * @return true：存在，false：不存在
+     */
+    private boolean articleIdExist(Integer id) {
+        return articleMapper.articleIdExist(id);
     }
 }

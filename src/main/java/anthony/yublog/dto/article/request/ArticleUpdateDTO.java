@@ -1,21 +1,20 @@
-package anthony.yublog.dto.article.response;
+package anthony.yublog.dto.article.request;
 
 import anthony.yublog.enums.ArticleStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
 
 @Data
-public class ArticleItemVO {
+public class ArticleUpdateDTO {
+
     private Integer id;
     private String title;
     private String content;
+    @URL
     private String coverImg;
     private ArticleStatus state;
     private Integer categoryId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
 }
