@@ -124,6 +124,19 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void delete(Integer id) {
-        articleMapper.delete(id);
+        int deletedRows = articleMapper.delete(id);
+        if (deletedRows == 0) {
+            throw new BizException(ErrorCode.POST_NOT_FOUND);
+        }
+    }
+
+    /**
+     * 判断文章ID是否存在
+     *
+     * @param id 文章ID
+     * @return true：存在，false：不存在
+     */
+    private boolean articleIdExist(Integer id) {
+        return articleMapper.articleIdExist(id);
     }
 }

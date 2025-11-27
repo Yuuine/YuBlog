@@ -28,5 +28,8 @@ public interface ArticleMapper {
     void updateArticle(ArticleUpdateDTO articleUpdateDTO);
 
     @Delete("delete from article where id = #{id}")
-    void delete(Integer id);
+    int delete(Integer id);
+
+    @Select("SELECT EXISTS(SELECT 1 FROM article WHERE id = #{id})")
+    boolean articleIdExist(Integer id);
 }
