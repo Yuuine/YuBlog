@@ -1,5 +1,6 @@
 package anthony.yublog.mapper;
 
+import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.entity.Article;
@@ -20,4 +21,8 @@ public interface ArticleMapper {
 
     @Select("select * from article where id = #{id}")
     ArticleDetailVO findById(Integer id);
+
+    @Insert("update article set title = #{title}, content = #{content}, cover_img = #{coverImg}, state = #{state}, " +
+            "update_time = #{updateTime} where id = #{id}")
+    void updateArticle(ArticleUpdateDTO articleUpdateDTO);
 }

@@ -2,6 +2,7 @@ package anthony.yublog.service.impl;
 
 import anthony.yublog.dto.article.request.ArticleAddDTO;
 import anthony.yublog.dto.article.request.ArticleListDTO;
+import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
@@ -100,5 +101,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleDetailVO findById(Integer id) {
         return articleMapper.findById(id);
+    }
+
+    /**
+     * 修改文章
+     *
+     * @param articleUpdateDTO 修改信息
+     */
+    @Override
+    public void updateArticle(ArticleUpdateDTO articleUpdateDTO) {
+        articleUpdateDTO.setUpdateTime(LocalDateTime.now());
+        articleMapper.updateArticle(articleUpdateDTO);
+
     }
 }
