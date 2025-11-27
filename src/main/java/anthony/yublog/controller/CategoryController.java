@@ -4,7 +4,7 @@ import anthony.yublog.dto.category.request.CategoryCreateDTO;
 import anthony.yublog.dto.category.request.CategoryDetailVO;
 import anthony.yublog.dto.category.response.CategoryListVO;
 import anthony.yublog.dto.category.request.CategoryUpdateDTO;
-import anthony.yublog.pojo.Result;
+import anthony.yublog.entity.Result;
 import anthony.yublog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

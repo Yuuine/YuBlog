@@ -8,7 +8,7 @@ import anthony.yublog.dto.user.response.UserUpdateVO;
 import anthony.yublog.exception.BizException;
 import anthony.yublog.exception.ErrorCode;
 import anthony.yublog.mapper.UserMapper;
-import anthony.yublog.pojo.User;
+import anthony.yublog.entity.User;
 import anthony.yublog.service.UserService;
 import anthony.yublog.utils.BcryptUtil;
 import anthony.yublog.utils.JwtUtil;
