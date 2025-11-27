@@ -2,6 +2,7 @@ package anthony.yublog.controller;
 
 import anthony.yublog.dto.article.request.ArticleAddDTO;
 import anthony.yublog.dto.article.request.ArticleListDTO;
+import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
 import anthony.yublog.entity.Result;
 import anthony.yublog.service.ArticleService;
@@ -27,8 +28,8 @@ public class ArticleController {
 
 
     @GetMapping
-    public Result<ArticleListVO> list(@RequestBody @Validated ArticleListDTO articleListDTO) {
-        ArticleListVO articleListVO = articleService.listArticles(articleListDTO);
+    public Result<ArticleListVO<ArticleItemVO>> list(@Validated ArticleListDTO articleListDTO) {
+        ArticleListVO<ArticleItemVO> articleListVO = articleService.listArticles(articleListDTO);
         log.info("查询文章列表");
         return Result.success(articleListVO);
     }

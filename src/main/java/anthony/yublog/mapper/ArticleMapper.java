@@ -1,8 +1,11 @@
 package anthony.yublog.mapper;
 
+import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.entity.Article;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface ArticleMapper {
@@ -11,4 +14,5 @@ public interface ArticleMapper {
             "values(#{title}, #{content}, #{coverImg}, #{state}, #{categoryId}, #{createUser}, #{createTime}, #{updateTime})")
     void addArticle(Article article);
 
+    List<ArticleItemVO> listArticles(Integer createUser, Integer categoryId, String state);
 }

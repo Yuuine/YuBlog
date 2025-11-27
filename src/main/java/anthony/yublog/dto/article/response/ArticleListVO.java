@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ArticleListVO {
+public class ArticleListVO<T> {
 
-    private Integer total;
-    private List<ArticleItemVO> items;
+    private Long total;
+    private List<T> items;
 }

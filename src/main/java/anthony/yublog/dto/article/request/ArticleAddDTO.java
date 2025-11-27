@@ -16,7 +16,7 @@ public class ArticleAddDTO {
     @NotBlank
     @URL
     private String coverImg;
-    @NotBlank
+    @NotNull
     private ArticleStatus state;
     @NotNull
     private Integer categoryId;
