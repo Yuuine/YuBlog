@@ -1,4 +1,4 @@
-package anthony.yublog.dto.article;
+package anthony.yublog.dto.article.request;
 
 import anthony.yublog.enums.ArticleStatus;
 import jakarta.validation.constraints.NotBlank;

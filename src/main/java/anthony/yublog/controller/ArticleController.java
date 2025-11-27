@@ -1,6 +1,8 @@
 package anthony.yublog.controller;
 
-import anthony.yublog.dto.article.ArticleAddDTO;
+import anthony.yublog.dto.article.request.ArticleAddDTO;
+import anthony.yublog.dto.article.request.ArticleListDTO;
+import anthony.yublog.dto.article.response.ArticleListVO;
 import anthony.yublog.entity.Result;
 import anthony.yublog.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +26,10 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/list")
-    public Result<String> list() {
-        log.info("获取文章列表");
-        return Result.success("文章数据");
+    @GetMapping
+    public Result<ArticleListVO> list(@RequestBody @Validated ArticleListDTO articleListDTO) {
+        ArticleListVO articleListVO = articleService.listArticles(articleListDTO);
+        log.info("查询文章列表");
+        return Result.success(articleListVO);
     }
 }

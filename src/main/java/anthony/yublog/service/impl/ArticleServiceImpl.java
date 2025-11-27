@@ -1,6 +1,8 @@
 package anthony.yublog.service.impl;
 
-import anthony.yublog.dto.article.ArticleAddDTO;
+import anthony.yublog.dto.article.request.ArticleAddDTO;
+import anthony.yublog.dto.article.request.ArticleListDTO;
+import anthony.yublog.dto.article.response.ArticleListVO;
 import anthony.yublog.entity.Article;
 import anthony.yublog.mapper.ArticleMapper;
 import anthony.yublog.service.ArticleService;
@@ -43,5 +45,10 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUpdateTime(LocalDateTime.now());
 
         articleMapper.addArticle(article);
+    }
+
+    @Override
+    public ArticleListVO listArticles(ArticleListDTO articleListDTO) {
+        return null;
     }
 }
