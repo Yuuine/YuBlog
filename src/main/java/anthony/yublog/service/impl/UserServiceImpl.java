@@ -110,7 +110,6 @@ public class UserServiceImpl implements UserService {
         return userInfoVO;
     }
 
-    //TODO: 重复参数校验
     @Override
     public UserUpdateVO update(UserUpdateDTO userUpdateDTO) {
         userUpdateDTO.setUpdateTime(LocalDateTime.now());

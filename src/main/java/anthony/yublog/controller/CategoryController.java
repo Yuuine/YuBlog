@@ -24,7 +24,6 @@ public class CategoryController {
      * 添加分类标签
      * 添加新的文章标签，必须项：文章分类名称
      */
-    //TODO: 全局异常处理功能待优化
     @PostMapping
     public Result<Object> add(@RequestBody @Validated CategoryCreateDTO category) {
         categoryService.add(category);
