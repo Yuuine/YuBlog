@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
  * Twitter Snowflake 雪花算法（64位 Long）
  * 结构：1位符号 + 41位时间戳 + 10位机器ID + 12位序列号
  */
-@Component
 public final class UUIDUtil {
 
     // 开始时间截 (2020-01-01)
