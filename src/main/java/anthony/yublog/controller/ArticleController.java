@@ -6,6 +6,7 @@ import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
+import anthony.yublog.dto.article.response.ArticleViewCountVO;
 import anthony.yublog.entity.Result;
 import anthony.yublog.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,5 +56,12 @@ public class ArticleController {
         articleService.delete(id);
         log.info("删除文章");
         return Result.success();
+    }
+
+    @PostMapping("/viewCount")
+    public Result<Object> viewCount(@RequestParam Integer id) {
+        ArticleViewCountVO viewCountVO = articleService.viewCount(id);
+        log.info("文章浏览数");
+        return Result.success(viewCountVO);
     }
 }

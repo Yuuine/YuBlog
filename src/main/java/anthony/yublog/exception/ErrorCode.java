@@ -56,6 +56,7 @@ public enum ErrorCode {
     POST_CATEGORY_INVALID(2008, "文章分类无效"),
     POST_TAG_LIMIT_EXCEEDED(2009, "文章标签数量超出限制"),
     POST_DRAFT_SAVE_FAILED(2010, "草稿保存失败"),
+    POST_VIEWCOUNT_UPDATE_FAILED(2011, "文章浏览数更新失败"),
 
     // 评论相关错误 (3000~3999)
     COMMENT_NOT_FOUND(3001, "评论不存在"),
