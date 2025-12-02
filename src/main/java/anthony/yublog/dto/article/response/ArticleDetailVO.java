@@ -15,6 +15,7 @@ public class ArticleDetailVO {
     private String coverImg;//封面图像
     private ArticleStatus state;//发布状态
     private Integer categoryId;//文章分类id
+    private Long viewCount;//浏览次数
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;//创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
