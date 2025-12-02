@@ -16,7 +16,7 @@ public class Article {
     private ArticleStatus state;//发布状态
     private Integer categoryId;//文章分类id
     private Integer createUser;//创建人ID
+    private Long viewCount;//浏览次数
     private LocalDateTime createTime;//创建时间
     private LocalDateTime updateTime;//更新时间
-    private Long viewCount;//浏览次数
 }
