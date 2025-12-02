@@ -81,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
         PageHelper.startPage(articleListDTO.getPageNum(), articleListDTO.getPageSize());
 
         // 调用mapper查询文章列表
-        List<ArticleItemVO> articleList = articleMapper.listArticles(createUser, categoryId, state.name());
+        List<ArticleItemVO> articleList = articleMapper.listArticles(createUser, categoryId, state != null ? state.name() : null);
 
         // 封装分页信息
         PageInfo<ArticleItemVO> pageInfo = new PageInfo<>(articleList);
