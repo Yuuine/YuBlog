@@ -6,6 +6,7 @@ import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
+import anthony.yublog.dto.article.response.ArticleViewCountVO;
 import anthony.yublog.entity.Article;
 import anthony.yublog.enums.ArticleStatus;
 import anthony.yublog.exception.BizException;
@@ -128,6 +129,24 @@ public class ArticleServiceImpl implements ArticleService {
         if (deletedRows == 0) {
             throw new BizException(ErrorCode.POST_NOT_FOUND);
         }
+    }
+
+    /**
+     * 文章浏览数
+     *
+     * @param id 文章ID
+     */
+    @Override
+    public ArticleViewCountVO viewCount(Integer id) {
+        int result = articleMapper.updateViewCount(id);
+        if (result == 0){
+            throw new BizException(ErrorCode.POST_VIEWCOUNT_UPDATE_FAILED);
+        }
+        Long viewNow = articleMapper.getViewCount(id);
+        ArticleViewCountVO data = new ArticleViewCountVO();
+        data.setId(id);
+        data.setViewCount(viewNow);
+        return data;
     }
 
     /**

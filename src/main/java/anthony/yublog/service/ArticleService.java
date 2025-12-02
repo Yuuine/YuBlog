@@ -6,6 +6,7 @@ import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.dto.article.response.ArticleListVO;
+import anthony.yublog.dto.article.response.ArticleViewCountVO;
 
 public interface ArticleService {
 
@@ -18,4 +19,6 @@ public interface ArticleService {
     void updateArticle(ArticleUpdateDTO articleUpdateDTO);
 
     void delete(Integer id);
+
+    ArticleViewCountVO viewCount(Integer id);
 }

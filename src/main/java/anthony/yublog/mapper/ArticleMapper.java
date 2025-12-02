@@ -4,10 +4,7 @@ import anthony.yublog.dto.article.request.ArticleUpdateDTO;
 import anthony.yublog.dto.article.response.ArticleDetailVO;
 import anthony.yublog.dto.article.response.ArticleItemVO;
 import anthony.yublog.entity.Article;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -32,4 +29,10 @@ public interface ArticleMapper {
 
     @Select("SELECT EXISTS(SELECT 1 FROM article WHERE id = #{id})")
     boolean articleIdExist(Integer id);
+
+    @Update("update article set view_count = view_count + 1 where id = #{id}")
+    int updateViewCount(Integer id);
+
+    @Select("SELECT view_count FROM article WHERE id = #{id}")
+    Long getViewCount(Integer id);
 }
