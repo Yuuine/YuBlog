@@ -156,6 +156,14 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleViewCountVO viewCount(Integer id) {
         //使用 redis 缓存文章浏览量
         String key = VIEW_KEY_PREFIX + id;
+        //如果 Reids 没值，先从DB读取数据，避免浏览量从0开始
+        if (!Boolean.TRUE.equals(stringRedisTemplate.hasKey(key))) {
+            Long dbViewCount = articleMapper.selectViewCountById(id);
+            if (dbViewCount == null) {
+                dbViewCount = 0L;
+            }
+            stringRedisTemplate.opsForValue().set(key, String.valueOf(dbViewCount));
+        }
 
         //Redis 原子性增1 返回增后值
         Long current = stringRedisTemplate.opsForValue().increment(key, 1L);

@@ -32,4 +32,7 @@ public interface ArticleMapper {
     boolean articleIdExist(Integer id);
 
     void batchUpdateViewCount(List<ArticleViewCountVO> batch);
+
+    @Select("SELECT view_count FROM article WHERE id = #{id}")
+    Long selectViewCountById(Integer id);
 }
