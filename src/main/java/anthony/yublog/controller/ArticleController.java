@@ -61,7 +61,6 @@ public class ArticleController {
     @PostMapping("/viewCount")
     public Result<Object> viewCount(@RequestParam Integer id) {
         ArticleViewCountVO viewCountVO = articleService.viewCount(id);
-        log.info("文章浏览数");
         return Result.success(viewCountVO);
     }
 }
