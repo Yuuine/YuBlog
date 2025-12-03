@@ -20,8 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
+
 
     // 文章浏览数缓存key
     private static final String VIEW_KEY_PREFIX = "article:viewCount:";
@@ -157,9 +158,9 @@ public class ArticleServiceImpl implements ArticleService {
         String key = VIEW_KEY_PREFIX + id;
 
         //Redis 原子性增1 返回增后值
-        Long current = redisTemplate.opsForValue().increment(key, 1L);
+        Long current = stringRedisTemplate.opsForValue().increment(key, 1L);
         // 给 key 设置过期时间，防止长期无人访问的文章一直占内存
-        redisTemplate.expire(key, Duration.ofDays(30));
+        stringRedisTemplate.expire(key, Duration.ofDays(30));
         //返回浏览数
         ArticleViewCountVO vo = new ArticleViewCountVO();
         vo.setId(id);
@@ -175,25 +176,26 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(rollbackFor = Exception.class)
     public void syncViewCountToDB() {
 
-        try (Cursor<String> cursor = redisTemplate.scan(ScanOptions.scanOptions()
+        try (Cursor<String> cursor = stringRedisTemplate.scan(ScanOptions.scanOptions()
                 .match("article:view:*").count(1000).build())) {
             List<ArticleViewCountVO> batch = new ArrayList<>(1000);
 
             while (cursor.hasNext()) {
                 String key = cursor.next();
-                String val = redisTemplate.opsForValue().get(key).toString();
-                if (val != null) {
-                    Integer articleId = Integer.parseInt(key.substring(VIEW_KEY_PREFIX.length()));
-                    Long viewCount = Long.parseLong(val);
-                    batch.add(new ArticleViewCountVO(articleId, viewCount));
-                    //
-                    if (batch.size() >= 1000) {
-                        flushBatch(batch);
-                        batch.clear();
-                    }
+                String val = stringRedisTemplate.opsForValue().get(key);
+                if (val == null) {
+                    continue;
+                }
+                Integer articleId = Integer.parseInt(key.substring(VIEW_KEY_PREFIX.length()));
+                Long viewCount = Long.parseLong(val);
+                batch.add(new ArticleViewCountVO(articleId, viewCount));
+                // 批量更新
+                if (batch.size() >= 1000) {
+                    flushBatch(batch);
+                    batch.clear();
                 }
             }
-            if (batch.isEmpty()) {
+            if (!batch.isEmpty()) {
                 flushBatch(batch);
             }
         } catch (Exception e) {
@@ -209,7 +211,7 @@ public class ArticleServiceImpl implements ArticleService {
         List<String> keysToDelete = batch.stream()
                 .map(vo -> VIEW_KEY_PREFIX + vo.getId())
                 .toList();
-        redisTemplate.delete(keysToDelete);
+        stringRedisTemplate.delete(keysToDelete);
     }
 
     /**
