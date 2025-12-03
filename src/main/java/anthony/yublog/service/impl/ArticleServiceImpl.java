@@ -19,19 +19,34 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
 @Service
 @Slf4j
+@EnableScheduling
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    // 文章浏览数缓存key
+    private static final String VIEW_KEY_PREFIX = "article:viewCount:";
 
     /**
      * 获取当前用户ID
@@ -138,15 +153,63 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public ArticleViewCountVO viewCount(Integer id) {
-        int result = articleMapper.updateViewCount(id);
-        if (result == 0){
-            throw new BizException(ErrorCode.POST_VIEWCOUNT_UPDATE_FAILED);
+        //使用 redis 缓存文章浏览量
+        String key = VIEW_KEY_PREFIX + id;
+
+        //Redis 原子性增1 返回增后值
+        Long current = redisTemplate.opsForValue().increment(key, 1L);
+        // 给 key 设置过期时间，防止长期无人访问的文章一直占内存
+        redisTemplate.expire(key, Duration.ofDays(30));
+        //返回浏览数
+        ArticleViewCountVO vo = new ArticleViewCountVO();
+        vo.setId(id);
+        vo.setViewCount(current);
+        return vo;
+    }
+
+    /**
+     * 每 3 分钟把 Redis 累计的浏览量刷回 MySQL
+     * SCAN + pipeline + 批量更新 + 删除已同步 key
+     */
+    @Scheduled(fixedRate = 180000, initialDelay = 600000) // 3 分钟刷回到数据库, 初始延迟 10 分钟
+    @Transactional(rollbackFor = Exception.class)
+    public void syncViewCountToDB() {
+
+        try (Cursor<String> cursor = redisTemplate.scan(ScanOptions.scanOptions()
+                .match("article:view:*").count(1000).build())) {
+            List<ArticleViewCountVO> batch = new ArrayList<>(1000);
+
+            while (cursor.hasNext()) {
+                String key = cursor.next();
+                String val = redisTemplate.opsForValue().get(key).toString();
+                if (val != null) {
+                    Integer articleId = Integer.parseInt(key.substring(VIEW_KEY_PREFIX.length()));
+                    Long viewCount = Long.parseLong(val);
+                    batch.add(new ArticleViewCountVO(articleId, viewCount));
+                    //
+                    if (batch.size() >= 1000) {
+                        flushBatch(batch);
+                        batch.clear();
+                    }
+                }
+            }
+            if (batch.isEmpty()) {
+                flushBatch(batch);
+            }
+        } catch (Exception e) {
+            log.error("同步文章浏览数到数据库失败", e);
         }
-        Long viewNow = articleMapper.getViewCount(id);
-        ArticleViewCountVO data = new ArticleViewCountVO();
-        data.setId(id);
-        data.setViewCount(viewNow);
-        return data;
+    }
+
+    public void flushBatch(List<ArticleViewCountVO> batch) {
+        if (batch == null || batch.isEmpty()) {
+            return;
+        }
+        articleMapper.batchUpdateViewCount(batch);
+        List<String> keysToDelete = batch.stream()
+                .map(vo -> VIEW_KEY_PREFIX + vo.getId())
+                .toList();
+        redisTemplate.delete(keysToDelete);
     }
 
     /**

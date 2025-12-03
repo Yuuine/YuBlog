@@ -16,5 +16,19 @@
             and category_id = #{categoryId}
         </where>
     </select>
+    <!-- 批量更新文章浏览数 -->
+    <update id="batchUpdateViewCount">
+        UPDATE article
+        SET views = views + CASE id
+        <foreach collection="list" item="item">
+            WHEN #{item.articleId} THEN #{item.views}
+        </foreach>
+        END
+        WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.articleId}
+        </foreach>
+    </update>
+
 
 </mapper>
